@@ -22,6 +22,7 @@ namespace FlareOut
         public MainForm()
         {
             InitializeComponent();
+            Text = "FlareZ build 5";
             m_ActForm = this;
             m_Display = txtEvents;
             m_AliasList = listDefines;
