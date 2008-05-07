@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Collections;
 using System.Windows.Forms;
 using System.Xml;
+using System.IO;
 
 namespace FlareOut
 {
@@ -133,11 +134,24 @@ namespace FlareOut
 
         private static void CreateLogFile(string doclogfile)
         {
-
+            using (StreamWriter writer = new StreamWriter(doclogfile))
+            {
+                writer.WriteLine("------------ FlareOut ------------");
+                for (int i = 0; i < m_Books.Count; ++i)
+                    writer.WriteLine((m_Books[i] as Book).Text);
+                writer.WriteLine("------------ FlareOut ------------");
+            }
         }
 
         private static void CreateLogFile(string logfile, XmlDepthSorter xmlsorter)
         {
+            using (StreamWriter writer = new StreamWriter(logfile))
+            {
+                writer.WriteLine("------------ FlareOut ------------");
+                for (int i = 0; i < xmlsorter.Count; ++i)
+                    writer.WriteLine(xmlsorter[i].Attributes["Title"].Value);
+                writer.WriteLine("------------ FlareOut ------------");
+            }
         }
     }
 }
