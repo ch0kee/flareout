@@ -54,6 +54,8 @@
     <Compile Include="FileHandler.cs" />
     <Compile Include="FlareAliasFile.cs" />
     <Compile Include="FlareProjectMgr.cs" />
+    <Compile Include="HtmProcessor.cs" />
+    <Compile Include="ImageResizer.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>

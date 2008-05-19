@@ -357,6 +357,11 @@ namespace FlareOut
                 FlareProjectMgr.SaveDefinesTo(sd.FileName);
         }
 
+        private void képekÁtméretezéseToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FlareProjectMgr.ResizeAllImageInTopics();
+        }
+
 
 
     }

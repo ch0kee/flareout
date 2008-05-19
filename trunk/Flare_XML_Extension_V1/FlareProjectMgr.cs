@@ -11,11 +11,17 @@ namespace FlareOut
     class FlareProject
     {
         // public
+        public string ProjectPath
+        {
+            get { return Path.GetDirectoryName(m_ProjectFilePath); }
+        }
+
         public FlareProject(string ProjectPath)
         {
-            m_ProjectPath = ProjectPath;
+
+            m_ProjectFilePath = ProjectPath;
             // toc path
-            string tocpath = Path.GetDirectoryName(m_ProjectPath)+@"\Project\TOCs";
+            string tocpath = Path.GetDirectoryName(m_ProjectFilePath)+@"\Project\TOCs";
             string[] files = Directory.GetFiles(tocpath);
             foreach (string file in files)
             {
@@ -25,7 +31,7 @@ namespace FlareOut
                 }
             }
             // alias & define path
-            string aliaspath = Path.GetDirectoryName(m_ProjectPath) + @"\Project\Advanced";
+            string aliaspath = Path.GetDirectoryName(m_ProjectFilePath) + @"\Project\Advanced";
             files = Directory.GetFiles(aliaspath);
             foreach(string file in files)
                 if (file.EndsWith(".flali"))
@@ -58,7 +64,7 @@ namespace FlareOut
         public string ALIASPath { get { return m_AliasPath; } }
         public string DEFINEPath { get { return m_DefinePath; } }
         // private
-        string  m_ProjectPath = null;
+        string  m_ProjectFilePath = null;
         string m_TOCPath = null;
         string m_AliasPath = null;
         string m_DefinePath = null;
@@ -67,6 +73,13 @@ namespace FlareOut
     {
         static bool m_IsLoaded;
         static FlareProject m_Project;
+        // public
+        public static string ProjectPath
+        {
+            get { return m_Project.ProjectPath; }
+        }
+
+
         public static bool LoadFlareProjectFile(string filename)
         {
             OpenFileDialog TocLocator = new OpenFileDialog();
@@ -107,8 +120,10 @@ namespace FlareOut
         //////////////////////////////////////////////////////////////////////////
         // Topic
         static FlareTopicFile m_TopicFile;
+        static TreeView m_TOC;
         public static void FillTreeWithToc(TreeView treeTOC)
         {
+            m_TOC = treeTOC;
             m_TopicFile = new FlareTopicFile(treeTOC, m_Project.TOCPath);
             m_TopicFile.TartalomjegyzékFaFeltöltése();
         }
@@ -180,6 +195,28 @@ namespace FlareOut
             }
             MainForm.Output = "#define azonosítók kiírása kész.";
             
+        }
+
+        public static void ResizeAllImageInTopics()
+        {            
+            XmlDocument doc = new XmlDocument();
+            doc.Load(m_Project.TOCPath);
+            //////////////////////////////////////////////////////////////////////////
+            XmlDepthSorter topics = new XmlDepthSorter(doc.LastChild);
+            for (int i = 0; i < topics.Count; ++i)
+            {
+                XmlNode topic = topics[i];
+                string htmfile = ProjectPath + (topic.Attributes["Link"].Value.Replace('/', '\\'));
+                HtmProcessor htmproc = new HtmProcessor(htmfile);
+                // ha sikerül kigyûjteni az ÖSSZES képet
+                if (htmproc.CollectImagesWithSize())
+                    // mindet átméretezzük
+                    foreach (ImageResizer ir in htmproc.Images)
+                        ir.ResizeImage();
+                else
+                    MainForm.Output = "Hiba a képek méretezése során, valószínüleg hibás a help";
+            }
+
         }
     }
 }
