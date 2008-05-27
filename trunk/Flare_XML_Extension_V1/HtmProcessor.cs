@@ -38,11 +38,23 @@ namespace FlareOut
                     string style = img.Attributes["style"].Value;
                     string[] delimiter = { "px;" };
                     string[] WH = style.Split(delimiter, StringSplitOptions.RemoveEmptyEntries);
-                    string W = WH[0].Substring(m_HTMSTYLE_WPrefix.Length);
-                    string H = WH[1].Substring(m_HTMSTYLE_HPrefix.Length);
+                    int widthindex = 0, heightindex = 0;
 
-                    int newWidth = int.Parse(W, System.Globalization.NumberStyles.Integer);
-                    int newHeight = int.Parse(H, System.Globalization.NumberStyles.Integer);
+                    if (WH[0].StartsWith(m_HTMSTYLE_WPrefix))
+                        widthindex = 0;
+                    else if (WH[1].StartsWith(m_HTMSTYLE_WPrefix))
+                        widthindex = 1;
+
+                    if (WH[0].StartsWith(m_HTMSTYLE_HPrefix))
+                        heightindex = 0;
+                    else if (WH[1].StartsWith(m_HTMSTYLE_HPrefix))
+                        heightindex = 1;
+
+                    string W = WH[widthindex].Substring(m_HTMSTYLE_WPrefix.Length);
+                    string H = WH[heightindex].Substring(m_HTMSTYLE_HPrefix.Length);
+
+                    int newWidth = int.Parse(W);
+                    int newHeight = int.Parse(H);
                     //
                     string imagepath = img.Attributes["src"].Value;
                     imagepath = imagepath.Replace('/', '\\');
@@ -54,11 +66,21 @@ namespace FlareOut
                         m_ImageList.Add(new ImageResizer(imagepath, newWidth, newHeight));
                     }
                     else
+                    {
+                        m_ErrorString = "Hiányzó képfájl : " + imagepath;
                         OK = false;
+                    }
                 }
             }
             return OK;
         }
+        string m_ErrorString = "";
+        public string GetErrorString()
+        {
+
+            return m_ErrorString;
+        }
+
         public List<ImageResizer> Images
         {
             get

@@ -4,6 +4,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Xml;
 using System.Collections;
+using System.IO;
 
 namespace FlareOut
 {
@@ -36,16 +37,19 @@ namespace FlareOut
             //
             m_Toc.Nodes.Clear();
             // xml dokumentum betöltése
-            XmlDocument document = new XmlDocument();
-            document.Load(m_FullPath);
-            // inicializálás
-            XmlNode tagCatapultToc = document.LastChild;
-            XmlNodeList xmlnodes = tagCatapultToc.ChildNodes;
-            // Toc.xml gyökér
-            m_Toc.Nodes.Add(new TreeNode(FileName));
-            // fejezetek feldolgozása
-            foreach (XmlNode node in xmlnodes)
-                ReadNode(m_Toc.Nodes[0], node);
+            using (FileStream fs = new FileStream(m_FullPath, FileMode.Open))
+            {
+                XmlDocument document = new XmlDocument();
+                document.Load(fs);
+                // inicializálás
+                XmlNode tagCatapultToc = document.GetElementsByTagName("CatapultToc")[0];
+                XmlNodeList xmlnodes = tagCatapultToc.ChildNodes;
+                // Toc.xml gyökér
+                m_Toc.Nodes.Add(new TreeNode(FileName));
+                // fejezetek feldolgozása
+                foreach (XmlNode node in xmlnodes)
+                    ReadNode(m_Toc.Nodes[0], node);
+            }
             //
             m_Toc.EndUpdate();
         }

@@ -22,27 +22,32 @@ namespace FlareOut
                 m_Image = Image.FromStream(fs);
             m_NewSize = new Size(newWidth, newHeight);
         }
+        //
+        bool SetFormat(string filename)
+        {
+            string ext = Path.GetExtension(filename);
+            bool formatset = true;
+
+            if (ext.ToLower() == ".jpg" || ext.ToLower() == ".jpeg")    //JPG
+                m_Format = ImageFormat.Jpeg;
+            else if (ext.ToLower() == ".png")                           //PNG
+                m_Format = ImageFormat.Png;
+            else if (ext.ToLower() == ".gif")                           //GIF
+                m_Format = ImageFormat.Gif;
+            else
+                formatset = false;
+            return formatset;
+        }
+        //
         bool Save(string savetofile)
         {
-            bool applicable = true;
-            string ext = Path.GetExtension(savetofile);
-
-            if (ext.ToLower() == ".jpg" || ext.ToLower() == ".jpeg")
-            {
-                m_Format = ImageFormat.Jpeg;
-            }
-            else if (ext.ToLower() == ".png")
-            {
-                m_Format = ImageFormat.Png;
-            }
-            else
-                applicable = false;
-            if (applicable)
+            if (SetFormat(savetofile))
             {
                 using (FileStream fs = new FileStream(m_Filename, FileMode.Truncate))
                     m_Image.Save(fs, m_Format);
+                return true;
             }
-            return applicable;
+            return false;
         }
         //
         void SetImageSize(int width, int height)
@@ -80,7 +85,7 @@ namespace FlareOut
                 // 
                 using (Graphics grPhoto = Graphics.FromImage(bmPhoto))
                 {
-                    grPhoto.Clear(Color.Red);
+                    grPhoto.Clear(Color.White);
                     grPhoto.InterpolationMode = InterpolationMode.HighQualityBicubic;
                     grPhoto.DrawImage(m_Image,
                         new Rectangle(destX, destY, destWidth, destHeight),
