@@ -3,6 +3,7 @@ using System.Collections;
 using System.Windows.Forms;
 using System.Xml;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace FlareOut
 {
@@ -45,6 +46,22 @@ namespace FlareOut
             m_WordApp.Quit(ref NO, ref na, ref na);
         }
          
+        static private string NormalizeTopicString( string tstr )
+        {
+            for (int i = 0; i < tstr.Length; ++i)
+                if (!char.IsLetterOrDigit(tstr[i])) 
+                {
+                    tstr = tstr.Insert(i, " ");
+                    tstr = tstr.Remove(i+1,1);
+                }
+            // whitespaceek normalizálása
+            tstr = Regex.Replace( tstr, @"\s", " " );
+            int f;
+            while ((f = tstr.IndexOf("  ")) != -1)
+                tstr = tstr.Remove(f, 1);
+            tstr = tstr.Trim();
+            return tstr;
+        }
 
         static public void ReadActiveDocStyles(ProgressBar pbar)
         {
@@ -60,13 +77,16 @@ namespace FlareOut
             string StyleName = (p.get_Style() as Microsoft.Office.Interop.Word.Style).NameLocal;
             if (Options.IsHeading(StyleName))
                 if (p.Range.Start != list[1].Range.Start) // ha nem fogjuk mégegyszer fedolgozni
-                    m_Books.Add(new Book(p.Range.Text, Options.Depth(StyleName)));
+                {
+
+                    m_Books.Add(new Book(NormalizeTopicString(p.Range.Text), Options.Depth(StyleName)));
+                }
         }
             for (int i = 1; i <= list.Count; ++i, pbar.Increment(1))
             {
                 string StyleName = (list[i].get_Style() as Microsoft.Office.Interop.Word.Style).NameLocal;
                 if (Options.IsHeading(StyleName))
-                    m_Books.Add(new Book(list[i].Range.Text, Options.Depth(StyleName)));
+                    m_Books.Add(new Book(NormalizeTopicString(list[i].Range.Text), Options.Depth(StyleName)));
             }
 
             m_WordDoc.Close(ref NO, ref na, ref na);
@@ -136,10 +156,14 @@ namespace FlareOut
         {
             using (StreamWriter writer = new StreamWriter(doclogfile))
             {
-                writer.WriteLine("------------ FlareOut ------------");
+                writer.WriteLine("-- Sorszám :: Mélység - Fejezetcím --");
+                writer.WriteLine("-- FlareOut MS Word file log       --");
+                writer.WriteLine("-------------------------------------");
+
                 for (int i = 0; i < m_Books.Count; ++i)
-                    writer.WriteLine((m_Books[i] as Book).Text);
-                writer.WriteLine("------------ FlareOut ------------");
+                    writer.WriteLine((i+1).ToString("D4")+" :: "+ (Depth(i)+1).ToString()+" - "+(m_Books[i] as Book).Text);
+                writer.WriteLine("-------------------------------------");
+                writer.WriteLine("-- FlareOut MS Word file log       --");
             }
         }
 
@@ -147,10 +171,13 @@ namespace FlareOut
         {
             using (StreamWriter writer = new StreamWriter(logfile))
             {
-                writer.WriteLine("------------ FlareOut ------------");
+                writer.WriteLine("-- Sorszám :: Mélység - Fejezetcím --");
+                writer.WriteLine("-- FlareOut Topic file log         --");
+                writer.WriteLine("-------------------------------------");
                 for (int i = 0; i < xmlsorter.Count; ++i)
-                    writer.WriteLine(xmlsorter[i].Attributes["Title"].Value);
-                writer.WriteLine("------------ FlareOut ------------");
+                    writer.WriteLine((i + 1).ToString("D4") + " :: " + (xmlsorter.Depth(i)+1).ToString() + " - " + xmlsorter[i].Attributes["Title"].Value);
+                writer.WriteLine("-------------------------------------");
+                writer.WriteLine("-- FlareOut Topic file log         --");
             }
         }
     }

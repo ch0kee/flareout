@@ -2,7 +2,10 @@
 <AboveFlare_Options>
   <TOC Mode="Colorize" BackColor="" />
   <ALI Mode="Colorize" BackColor="ff0080ff" />
-  <PRO Dir="D:\Help2008\JustFirstDOC\JustFirstDOC.flprj" />
+  <ProjectSettings>
+    <ProjectFile Dir="D:\Munkak\Olasz Help\AL08ItaHelp\AL08ItaHelp.flprj" />
+    <DefineFinder Dir="" />
+  </ProjectSettings>
   <MSWordProcessing Lang="HU">
     <TopicStyles Lang="HU">
       <Style Name="Focim" Depth="0" />

@@ -203,6 +203,7 @@ namespace FlareOut
             doc.Load(m_Project.TOCPath);
             //////////////////////////////////////////////////////////////////////////
             XmlDepthSorter topics = new XmlDepthSorter(doc.LastChild);
+            bool everything_ok = true;
             for (int i = 0; i < topics.Count; ++i)
             {
                 XmlNode topic = topics[i];
@@ -214,8 +215,14 @@ namespace FlareOut
                     foreach (ImageResizer ir in htmproc.Images)
                         ir.ResizeImage();
                 else
-                    MainForm.Output = "Hiba a képek méretezése során, valószínüleg hibás a help";
+                {
+                    MainForm.Output = "Hiba a képek méretezése során : "+Path.GetFileName(htmfile);
+                    MainForm.Output = htmproc.GetErrorString();
+                    everything_ok = false;
+                }
             }
+            if (everything_ok)
+                MainForm.Output = "A képek átméretezése sikeresen elkészült.";
 
         }
     }
