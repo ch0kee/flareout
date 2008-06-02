@@ -133,6 +133,8 @@ namespace FlareOut
         public void IncDepth(int index)
         {
             XmlNode node = m_DepthOrderedNodes[index] as XmlNode;
+            if (node.PreviousSibling == null)
+                throw new System.Exception("Érvénytelen mélység itt : "+node.Attributes["Title"].Value);
             node.PreviousSibling.AppendChild(node.Clone());
             node.ParentNode.RemoveChild(node);
         }
