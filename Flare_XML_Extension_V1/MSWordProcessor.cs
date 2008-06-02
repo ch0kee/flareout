@@ -120,35 +120,44 @@ namespace FlareOut
             XmlDepthSorter xmlSorter = new XmlDepthSorter(node);
             MainForm.Output = "DOC címsorok elemszáma : " + Count.ToString()
                 + ";Cél XML fájl elemszáma : " + xmlSorter.Count.ToString();
-            if (xmlSorter.Count != Count) {
-                string flarelogfile = MainForm.ExeDirectory+"TOPICSflare.log";
-                string doclogfile = MainForm.ExeDirectory + "TOPICSword.log";
-                MainForm.Output = "!Log fájlok létrehozása!";
-                MainForm.Output = "Flare tartalomjegyzék fejezetek : " + flarelogfile;
-                MainForm.Output = "MS Word fejezetek : " + doclogfile;
-                CreateLogFile(flarelogfile, xmlSorter);
-                CreateLogFile(doclogfile);
-                return;
-            }
-            // egyeztetés
-            for (int i = 0; i < xmlSorter.Count; )
+
+            string flarelogfile = MainForm.ExeDirectory+"TOPICSflare.log";
+            string doclogfile = MainForm.ExeDirectory + "TOPICSword.log";
+            MainForm.Output = "!Log fájlok létrehozása!";
+            MainForm.Output = "Flare tartalomjegyzék fejezetek : " + flarelogfile;
+            MainForm.Output = "MS Word fejezetek : " + doclogfile;
+            CreateLogFile(flarelogfile, xmlSorter);
+            CreateLogFile(doclogfile);
+            try
             {
-                while (i < xmlSorter.Count && xmlSorter.Depth(i) == Depth(i))
-                    ++i;
-                if (i < xmlSorter.Count)
+                if (xmlSorter.Count == Count)
                 {
-                    if (xmlSorter.Depth(i) < Depth(i))
+                    // egyeztetés
+                    for (int i = 0; i < xmlSorter.Count; )
                     {
-                        xmlSorter.IncDepth(i);
-                        i = 0;
-                        xmlSorter.Reorder();
-                    }
-                    else
-                    {
-                        MainForm.Output = "Hibás szerkezet";
-                        return;
+                        while (i < xmlSorter.Count && xmlSorter.Depth(i) == Depth(i))
+                            ++i;
+                        if (i < xmlSorter.Count)
+                        {
+                            if (xmlSorter.Depth(i) < Depth(i))
+                            {
+                                xmlSorter.IncDepth(i);
+                                i = 0;
+                                xmlSorter.Reorder();
+                            }
+                            else
+                            {
+                                MainForm.Output = "Hibás szerkezet";
+                                return;
+                            }
+                        }
                     }
                 }
+            }
+            catch (System.Exception e)
+            {
+                MessageBox.Show(e.Message);
+
             }
         }
 

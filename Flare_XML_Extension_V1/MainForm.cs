@@ -362,6 +362,12 @@ namespace FlareOut
             FlareProjectMgr.ResizeAllImageInTopics();
         }
 
+        private void nemAngolKarakterekSzûréseAFájlnevekbenToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FlareProjectMgr.FilterNonEnglishCharacters();
+
+        }
+
 
 
     }
