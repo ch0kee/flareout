@@ -368,6 +368,11 @@ namespace FlareOut
 
         }
 
+        private void összerendelésekElvégzéseAutomatikusanMásikFlareProjektAlapjánToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FlareProjectMgr.MakeAliasesUsingOtherProject();
+        }
+
 
 
     }

@@ -41,6 +41,7 @@ namespace FlareOut
             this.flareProjektBetöltéseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.flareTOCJavításaABetöltöttTartalomjegyzékAlapjánToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.képekÁtméretezéseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.nemAngolKarakterekSzûréseAFájlnevekbenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.azonosítóMûveletekToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.azonosítókeresõToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.defineokKiírásaHTMLHelpKompatibilisFormátumbanToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -60,7 +61,7 @@ namespace FlareOut
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.labelSelectedTopic = new System.Windows.Forms.Label();
-            this.nemAngolKarakterekSzûréseAFájlnevekbenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.összerendelésekElvégzéseAutomatikusanMásikFlareProjektAlapjánToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             columnHeader1 = new System.Windows.Forms.ColumnHeader();
             columnHeader2 = new System.Windows.Forms.ColumnHeader();
             columnHeader3 = new System.Windows.Forms.ColumnHeader();
@@ -170,11 +171,19 @@ namespace FlareOut
             this.képekÁtméretezéseToolStripMenuItem.Text = "Képek átméretezése";
             this.képekÁtméretezéseToolStripMenuItem.Click += new System.EventHandler(this.képekÁtméretezéseToolStripMenuItem_Click);
             // 
+            // nemAngolKarakterekSzûréseAFájlnevekbenToolStripMenuItem
+            // 
+            this.nemAngolKarakterekSzûréseAFájlnevekbenToolStripMenuItem.Name = "nemAngolKarakterekSzûréseAFájlnevekbenToolStripMenuItem";
+            this.nemAngolKarakterekSzûréseAFájlnevekbenToolStripMenuItem.Size = new System.Drawing.Size(354, 22);
+            this.nemAngolKarakterekSzûréseAFájlnevekbenToolStripMenuItem.Text = "Nem angol karakterek szûrése a fájlnevekben";
+            this.nemAngolKarakterekSzûréseAFájlnevekbenToolStripMenuItem.Click += new System.EventHandler(this.nemAngolKarakterekSzûréseAFájlnevekbenToolStripMenuItem_Click);
+            // 
             // azonosítóMûveletekToolStripMenuItem
             // 
             this.azonosítóMûveletekToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.azonosítókeresõToolStripMenuItem,
-            this.defineokKiírásaHTMLHelpKompatibilisFormátumbanToolStripMenuItem});
+            this.defineokKiírásaHTMLHelpKompatibilisFormátumbanToolStripMenuItem,
+            this.összerendelésekElvégzéseAutomatikusanMásikFlareProjektAlapjánToolStripMenuItem});
             this.azonosítóMûveletekToolStripMenuItem.Name = "azonosítóMûveletekToolStripMenuItem";
             this.azonosítóMûveletekToolStripMenuItem.Size = new System.Drawing.Size(130, 20);
             this.azonosítóMûveletekToolStripMenuItem.Text = "Azonosító mûveletek";
@@ -182,14 +191,14 @@ namespace FlareOut
             // azonosítókeresõToolStripMenuItem
             // 
             this.azonosítókeresõToolStripMenuItem.Name = "azonosítókeresõToolStripMenuItem";
-            this.azonosítókeresõToolStripMenuItem.Size = new System.Drawing.Size(386, 22);
+            this.azonosítókeresõToolStripMenuItem.Size = new System.Drawing.Size(447, 22);
             this.azonosítókeresõToolStripMenuItem.Text = "Azonosító-keresõ...";
             this.azonosítókeresõToolStripMenuItem.Click += new System.EventHandler(this.azonosítókeresõToolStripMenuItem_Click);
             // 
             // defineokKiírásaHTMLHelpKompatibilisFormátumbanToolStripMenuItem
             // 
             this.defineokKiírásaHTMLHelpKompatibilisFormátumbanToolStripMenuItem.Name = "defineokKiírásaHTMLHelpKompatibilisFormátumbanToolStripMenuItem";
-            this.defineokKiírásaHTMLHelpKompatibilisFormátumbanToolStripMenuItem.Size = new System.Drawing.Size(386, 22);
+            this.defineokKiírásaHTMLHelpKompatibilisFormátumbanToolStripMenuItem.Size = new System.Drawing.Size(447, 22);
             this.defineokKiírásaHTMLHelpKompatibilisFormátumbanToolStripMenuItem.Text = "#define-ok kiírása HTML Help kompatibilis formátumban...";
             this.defineokKiírásaHTMLHelpKompatibilisFormátumbanToolStripMenuItem.Click += new System.EventHandler(this.defineokKiírásaHTMLHelpKompatibilisFormátumbanToolStripMenuItem_Click);
             // 
@@ -363,12 +372,12 @@ namespace FlareOut
             this.labelSelectedTopic.TabIndex = 19;
             this.labelSelectedTopic.Text = "selectedTopic";
             // 
-            // nemAngolKarakterekSzûréseAFájlnevekbenToolStripMenuItem
+            // összerendelésekElvégzéseAutomatikusanMásikFlareProjektAlapjánToolStripMenuItem
             // 
-            this.nemAngolKarakterekSzûréseAFájlnevekbenToolStripMenuItem.Name = "nemAngolKarakterekSzûréseAFájlnevekbenToolStripMenuItem";
-            this.nemAngolKarakterekSzûréseAFájlnevekbenToolStripMenuItem.Size = new System.Drawing.Size(354, 22);
-            this.nemAngolKarakterekSzûréseAFájlnevekbenToolStripMenuItem.Text = "Nem angol karakterek szûrése a fájlnevekben";
-            this.nemAngolKarakterekSzûréseAFájlnevekbenToolStripMenuItem.Click += new System.EventHandler(this.nemAngolKarakterekSzûréseAFájlnevekbenToolStripMenuItem_Click);
+            this.összerendelésekElvégzéseAutomatikusanMásikFlareProjektAlapjánToolStripMenuItem.Name = "összerendelésekElvégzéseAutomatikusanMásikFlareProjektAlapjánToolStripMenuItem";
+            this.összerendelésekElvégzéseAutomatikusanMásikFlareProjektAlapjánToolStripMenuItem.Size = new System.Drawing.Size(447, 22);
+            this.összerendelésekElvégzéseAutomatikusanMásikFlareProjektAlapjánToolStripMenuItem.Text = "Összerendelések elvégzése automatikusan másik Flare projekt alapján...";
+            this.összerendelésekElvégzéseAutomatikusanMásikFlareProjektAlapjánToolStripMenuItem.Click += new System.EventHandler(this.összerendelésekElvégzéseAutomatikusanMásikFlareProjektAlapjánToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -434,6 +443,7 @@ namespace FlareOut
         private System.Windows.Forms.ToolStripMenuItem defineokKiírásaHTMLHelpKompatibilisFormátumbanToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem képekÁtméretezéseToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem nemAngolKarakterekSzûréseAFájlnevekbenToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem összerendelésekElvégzéseAutomatikusanMásikFlareProjektAlapjánToolStripMenuItem;
     }
 }
 
