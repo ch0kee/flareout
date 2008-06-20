@@ -5,6 +5,35 @@ using System.IO;
 
 namespace FlareOut
 {
+    static class FileFunctions
+    {
+        public static string GetNextFileName( string filename )
+        {
+            string filepath = Path.GetDirectoryName(filename);
+
+            string ext = Path.GetExtension(filename);
+            string withoutext = Path.GetFileNameWithoutExtension(filename);
+
+            filename = withoutext + ext;
+
+            int i = 0;
+            while (ContainsFile(filepath, filename))
+            {
+                filename = withoutext + "_" + i.ToString() + ext;
+                ++i;
+            }
+            return filepath+@"\"+filename;
+        }
+
+        private static bool ContainsFile(string path, string file)
+        {
+            string[] files = Directory.GetFiles(path);
+            foreach (string f in files)
+                if (Path.GetFileName(f) == Path.GetFileName(file))
+                    return true;
+            return false;
+        }
+    }
     class BackupMaker
     {
         public BackupMaker( string filename, bool createbackup )
@@ -24,30 +53,39 @@ namespace FlareOut
         }
         public static void CreateBackup(string filename)
         {
-            string filepath = Path.GetDirectoryName(filename);
-            string backupfile = filename + ".fobckp";
-            if (ContainsFile(filepath, backupfile))
-            {
-                int i = 0;
-                string new_bckp = "";
-                do
-                {
-                    ++i;
-                    new_bckp = backupfile + "_" + i.ToString();
-                } while (ContainsFile(filepath, new_bckp));
-                backupfile = new_bckp;
-            }
+            string backupfile = FileFunctions.GetNextFileName(filename + ".fobckp");
             File.Copy(filename, backupfile);
             MainForm.Output = "Biztonsági másolat létrehozva ide : " + backupfile;
         }
-        //
-        private static bool ContainsFile(string path, string file)
+
+    }
+
+    public static class Logger
+    {
+        static readonly string LOGFILE;
+        static string m_LogFile;
+
+        static Logger()
         {
-            string[] files = Directory.GetFiles(path);
-            foreach (string f in files)
-                if (f == file)
-                    return true;
-            return false;
+            LOGFILE = AppDomain.CurrentDomain.BaseDirectory + "FlareOutLog.log";
+        }
+
+        public static void CreateLogFile()
+        {
+            m_LogFile = FileFunctions.GetNextFileName(LOGFILE);
+            using (StreamWriter sw = new StreamWriter(m_LogFile)) 
+            {
+                sw.WriteLine("========= FlareOut Log File =========");
+                sw.WriteLine("Created : " + DateTime.Now.ToString());
+                sw.WriteLine("*************************************");
+            }
+        }
+        public static void Log(string log)
+        {
+            using (StreamWriter sw = new StreamWriter(m_LogFile, true))
+            {
+                sw.WriteLine(log);
+            }
         }
     }
 }

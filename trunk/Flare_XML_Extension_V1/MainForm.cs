@@ -21,6 +21,7 @@ namespace FlareOut
         const string m_NO_SELECTED_TOPIC = "Nincs kiválasztott fejezet!";
         public MainForm()
         {
+            Logger.CreateLogFile();
             InitializeComponent();
             Text = "FlareZ build 5";
             m_ActForm = this;
