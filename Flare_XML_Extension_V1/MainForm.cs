@@ -93,8 +93,7 @@ namespace FlareOut
         private void beállításokToolStripMenuItem_Click(object sender, EventArgs e)
         {
             OptionsDialog options = new OptionsDialog();
-            if (options.ShowDialog() == DialogResult.OK)
-                ;// frissítés
+            options.ShowDialog();
         }
         //////////////////////////////////////////////////////////////////////////
         // Flare
