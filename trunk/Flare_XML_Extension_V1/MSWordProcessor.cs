@@ -31,8 +31,8 @@ namespace FlareOut
         static public void OpenDocument(object filename)
         {
 
-            m_WordDoc = m_WordApp.Documents.Open(ref filename, ref na, ref YES, ref na, ref na,
-                ref na, ref na, ref na, ref na, ref na, ref na, ref NO/*Megjelenjen*/, ref na, ref na, ref na, ref na);
+            m_WordDoc = m_WordApp.Documents.Open(ref filename/*Útvonal*/, ref na, ref YES, ref na, ref na,
+                ref na, ref na, ref na, ref na, ref na, ref na, ref NO/*Megjelenjen?NE!*/, ref na, ref na, ref na, ref na);
             m_WordDoc.Activate();
         }
         static public void StartWord()
@@ -43,7 +43,7 @@ namespace FlareOut
         }
         static public void StopWord()
         {
-            m_WordApp.Quit(ref NO, ref na, ref na);
+            (m_WordDoc as Microsoft.Office.Interop.Word._Application).Quit(ref NO, ref na, ref na);
         }
          
         static private string NormalizeTopicString( string tstr )
@@ -56,11 +56,10 @@ namespace FlareOut
                 }
             // whitespaceek normalizálása
             tstr = Regex.Replace( tstr, @"\s", " " );
-            int f;
-            while ((f = tstr.IndexOf("  ")) != -1)
-                tstr = tstr.Remove(f, 1);
-            tstr = tstr.Trim();
-            return tstr;
+            //c közbülsõ szóközök eltávolítása
+            for(int f = 0; (f = tstr.IndexOf("  ")) != -1; tstr = tstr.Remove(f, 1));
+            //c sor eleji, sor végi szóközök eltávolítása
+            return tstr.Trim();
         }
 
         static public void ReadActiveDocStyles(ProgressBar pbar)
@@ -72,24 +71,24 @@ namespace FlareOut
             //////////////////////////////////////////////////////////////////////////
             Microsoft.Office.Interop.Word.ListParagraphs list = m_WordDoc.ListParagraphs;
             pbar.Maximum = list.Count;
-        {
             Microsoft.Office.Interop.Word.Paragraph p = m_WordDoc.Paragraphs.First;
-            string StyleName = (p.get_Style() as Microsoft.Office.Interop.Word.Style).NameLocal;
-            if (Options.IsHeading(StyleName))
+            string FirstParagraphsStylename = (p.get_Style() as Microsoft.Office.Interop.Word.Style).NameLocal;
+            if (Options.IsHeading(FirstParagraphsStylename))
                 if (p.Range.Start != list[1].Range.Start) // ha nem fogjuk mégegyszer fedolgozni
-                {
-
-                    m_Books.Add(new Book(NormalizeTopicString(p.Range.Text), Options.Depth(StyleName)));
-                }
-        }
+                    m_Books.Add(new Book(NormalizeTopicString(p.Range.Text), //c fejezetcím
+                                         Options.Depth(FirstParagraphsStylename))); //c mélység
             for (int i = 1; i <= list.Count; ++i, pbar.Increment(1))
             {
-                string StyleName = (list[i].get_Style() as Microsoft.Office.Interop.Word.Style).NameLocal;
-                if (Options.IsHeading(StyleName))
-                    m_Books.Add(new Book(NormalizeTopicString(list[i].Range.Text), Options.Depth(StyleName)));
+                string ParagraphsStylename = (list[i].get_Style() as Microsoft.Office.Interop.Word.Style).NameLocal;
+                if (Options.IsHeading(ParagraphsStylename))
+                    m_Books.Add(new Book(NormalizeTopicString(list[i].Range.Text),
+                                         Options.Depth(ParagraphsStylename)));
             }
 
-            m_WordDoc.Close(ref NO, ref na, ref na);
+           // (Microsoft.Office.Interop.Word);
+            {
+                (m_WordDoc as Microsoft.Office.Interop.Word._Document).Close(ref NO, ref na, ref na);
+            }
             m_IsLoaded = true;
 
         }
