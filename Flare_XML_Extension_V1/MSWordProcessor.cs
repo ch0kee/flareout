@@ -43,7 +43,7 @@ namespace FlareOut
         }
         static public void StopWord()
         {
-            (m_WordDoc as Microsoft.Office.Interop.Word._Application).Quit(ref NO, ref na, ref na);
+            m_WordApp.Quit(ref NO, ref na, ref na);
         }
          
         static private string NormalizeTopicString( string tstr )

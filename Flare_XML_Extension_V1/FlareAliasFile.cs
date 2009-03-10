@@ -32,8 +32,9 @@ namespace FlareOut
 
                     string[] delimiters = { " ", "\t" };
                     string[] all_cell = line.Split( delimiters ,StringSplitOptions.RemoveEmptyEntries);
-                    if (all_cell.Length != 3)
+                    if (all_cell.Length < 3)
                         continue;
+                    all_cell = new string[3] { all_cell[0], all_cell[1], all_cell[2] };
                     m_Defines.Items.Add(new ContextNumber(all_cell));
                 }
             }
@@ -56,7 +57,14 @@ namespace FlareOut
                     foreach (ContextNumber ContNum in m_Defines.Items)
                         if (ContNum.IsTheSame(node))
                         {
-                            ContNum.CalledTopic = TocXml.URL_2_Node(node.Attributes["Link"].Value) as Topic;
+                            Topic calledtopic = TocXml.URL_2_Node(node.Attributes["Link"].Value) as Topic;
+                            if (calledtopic == null)
+                            {
+                                MainForm.Output = "Hiányzó hivatkozás !!"
+                                    + "#define név: " + node.Attributes["Name"].Value
+                                    + " hiányzó link: " + node.Attributes["Link"].Value;
+                            } else
+                                ContNum.CalledTopic = TocXml.URL_2_Node(node.Attributes["Link"].Value) as Topic;
                             found = true;
                             break;
                         }
