@@ -59,33 +59,4 @@ namespace FlareOut
         }
 
     }
-
-    public static class Logger
-    {
-        static readonly string LOGFILE;
-        static string m_LogFile;
-
-        static Logger()
-        {
-            LOGFILE = AppDomain.CurrentDomain.BaseDirectory + "FlareOutLog.log";
-        }
-
-        public static void CreateLogFile()
-        {
-            m_LogFile = FileFunctions.GetNextFileName(LOGFILE);
-            using (StreamWriter sw = new StreamWriter(m_LogFile)) 
-            {
-                sw.WriteLine("========= FlareOut Log File =========");
-                sw.WriteLine("Created : " + DateTime.Now.ToString());
-                sw.WriteLine("*************************************");
-            }
-        }
-        public static void Log(string log)
-        {
-            using (StreamWriter sw = new StreamWriter(m_LogFile, true))
-            {
-                sw.WriteLine(log);
-            }
-        }
-    }
 }

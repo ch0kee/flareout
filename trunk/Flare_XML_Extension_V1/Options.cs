@@ -20,6 +20,9 @@ namespace FlareOut
         public static string Language { get { return m_Language; } set { m_Language = value; } }
         static int[] m_TopicDepths;
 
+        public static string ImagePathPrefix { get { return m_ImagePathPrefix; } }
+        static string m_ImagePathPrefix;
+
         static string m_OPTIONS_FILE;
             //////////////////////////////////////////////////////////////////////////
         static public void LoadOptions()
@@ -32,6 +35,7 @@ namespace FlareOut
             XmlNode AboveFlare_Options = GetChildNodeByName(oxml, "AboveFlare_Options");
             XmlNode MSWordProcessing = GetChildNodeByName(AboveFlare_Options, "MSWordProcessing");
             XmlNode ProjectSettings = GetChildNodeByName(AboveFlare_Options, "ProjectSettings");
+            m_ImagePathPrefix = GetChildNodeByName(AboveFlare_Options, "Images").Attributes["PathPrefix"].Value;
             LoadProjectSettings(ProjectSettings);
             LoadWordSettings(MSWordProcessing);
             LoadBehaviorSettings(AboveFlare_Options);

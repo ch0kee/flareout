@@ -32,6 +32,11 @@ namespace FlareOut
                 //
                 XmlNodeList imagenodes = doc.GetElementsByTagName("img"); // képek
                 string projectpath = FlareProjectMgr.ProjectPath;
+                string defimagepathprefix = Options.ImagePathPrefix;
+                defimagepathprefix = defimagepathprefix.Replace('/', '\\');
+                defimagepathprefix = defimagepathprefix.TrimStart('.');
+                defimagepathprefix = projectpath + @"\Content" + defimagepathprefix;
+                
                 foreach (XmlNode img in imagenodes)
                 {
                     // style="width: 451px;height: 48px;"
@@ -61,14 +66,26 @@ namespace FlareOut
                     imagepath = imagepath.TrimStart('.');
                     imagepath = projectpath + @"\Content" + imagepath;
                     //
+
+                    
                     if (File.Exists(imagepath))
                     {
                         m_ImageList.Add(new ImageResizer(imagepath, newWidth, newHeight));
                     }
                     else
                     {
-                        m_ErrorString = "Hiányzó képfájl : " + imagepath;
-                        OK = false;
+                        string alternatefile = defimagepathprefix + Path.GetFileName(imagepath);
+                        if (File.Exists(alternatefile))
+                        {
+                            m_ImageList.Add(new ImageResizer(alternatefile, newWidth, newHeight));
+                            img.Attributes["src"].Value = Options.ImagePathPrefix + Path.GetFileName(imagepath);
+                            doc.Save(fs);
+                        }
+                        else
+                        {
+                            m_ErrorString = "Hiányzó képfájl : " + imagepath;
+                            OK = false;
+                        }
                     }
                 }
             }

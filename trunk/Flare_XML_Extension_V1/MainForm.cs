@@ -3,6 +3,7 @@ using System.Collections;
 using System.Drawing;
 using System.Windows.Forms;
 using System.IO;
+using FlareOut.Keywords;
 
 namespace FlareOut
 {
@@ -21,7 +22,6 @@ namespace FlareOut
         const string m_NO_SELECTED_TOPIC = "Nincs kiválasztott fejezet!";
         public MainForm()
         {
-            Logger.CreateLogFile();
             InitializeComponent();
             Text = "FlareZ build 5";
             m_ActForm = this;
@@ -373,8 +373,28 @@ namespace FlareOut
             FlareProjectMgr.MakeAliasesUsingOtherProject();
         }
 
+        private void beágyazottObjektumokPNGFormátumúváKonvertálásaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ConvertToPNGinWordDocs convform = new ConvertToPNGinWordDocs();
+            if (convform.ShowDialog() == DialogResult.OK)
+            {
+            }
+        }
 
 
+        private void fejezetcímegyezésAlapjánToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DefineLinkerByTopicTitle linker = new DefineLinkerByTopicTitle();
+            if (linker.CheckIntegrity())
+                linker.MakeAutoLinks();
+        }
+
+        private void címsorstruktúraAlapjánToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DefineLinkerByHeadingStructure linker = new DefineLinkerByHeadingStructure();
+            if (linker.CheckIntegrity())
+                linker.MakeAutoLinks();
+        }
     }
 
 }
