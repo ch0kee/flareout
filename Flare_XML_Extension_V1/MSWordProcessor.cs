@@ -4,14 +4,16 @@ using System.Windows.Forms;
 using System.Xml;
 using System.IO;
 using System.Text.RegularExpressions;
+using MsWord = Microsoft.Office.Interop.Word;
+using System.Drawing;
 
 namespace FlareOut
 {
     static class MSWordProcessor
     {
         static private object na = System.Reflection.Missing.Value;
-        static Microsoft.Office.Interop.Word.Application m_WordApp;
-        static Microsoft.Office.Interop.Word.Document m_WordDoc;
+        static MsWord.Application m_WordApp;
+        static MsWord.Document m_WordDoc;
         static MSWordProcessor()
         {
             Reset();
@@ -35,9 +37,17 @@ namespace FlareOut
                 ref na, ref na, ref na, ref na, ref na, ref na, ref NO/*Megjelenjen?NE!*/, ref na, ref na, ref na, ref na);
             m_WordDoc.Activate();
         }
+
+        static public void WriteDocument(object filename)
+        {
+            m_WordDoc = m_WordApp.Documents.Open(ref filename/*Útvonal*/, ref na, ref NO, ref na, ref na,
+                ref na, ref na, ref na, ref na, ref na, ref na, ref NO/*Megjelenjen?NE!*/, ref na, ref na, ref na, ref na);
+            m_WordDoc.Activate();
+        }
+        
         static public void StartWord()
         {
-            m_WordApp = new Microsoft.Office.Interop.Word.Application();
+            m_WordApp = new MsWord.Application();
             m_WordApp.Visible = false;  // háttérben fut
 
         }
@@ -62,24 +72,51 @@ namespace FlareOut
             return tstr.Trim();
         }
 
-        static public void ReadActiveDocStyles(ProgressBar pbar)
+
+        public static void ConvertObjectsToPNG(ProgressBar pbar)
+        {
+            pbar.Value = 0;
+            pbar.Minimum = 0;
+            pbar.Step = 1;
+            pbar.Maximum = m_WordDoc.InlineShapes.Count;
+
+            for (int i = 0; i < m_WordDoc.InlineShapes.Count; ++i, pbar.Increment(1))
+            {
+                Clipboard.Clear();
+                MsWord.InlineShape shp = m_WordDoc.InlineShapes[i];
+                shp.Select();
+                m_WordApp.Selection.Copy();
+                if (Clipboard.ContainsImage())
+                {
+                    Image img = Clipboard.GetImage();
+                    img.Save("ch0kee_tmp"+i+".png", System.Drawing.Imaging.ImageFormat.Png);
+                    
+                    //m_WordApp.Selection.InsertFile("ch0kee_tmp.png", ref na, ref na, ref na, ref na);
+                }
+                else
+                    MessageBox.Show("No Image Object");
+            }
+            m_WordDoc.Save();
+        }
+
+        public static void ReadActiveDocStyles(ProgressBar pbar)
         {
             pbar.Value = 0;
             pbar.Minimum = 0;
             pbar.Step = 1;
             // kigyûjtés
             //////////////////////////////////////////////////////////////////////////
-            Microsoft.Office.Interop.Word.ListParagraphs list = m_WordDoc.ListParagraphs;
+            MsWord.ListParagraphs list = m_WordDoc.ListParagraphs;
             pbar.Maximum = list.Count;
-            Microsoft.Office.Interop.Word.Paragraph p = m_WordDoc.Paragraphs.First;
-            string FirstParagraphsStylename = (p.get_Style() as Microsoft.Office.Interop.Word.Style).NameLocal;
+            MsWord.Paragraph p = m_WordDoc.Paragraphs.First;
+            string FirstParagraphsStylename = (p.get_Style() as MsWord.Style).NameLocal;
             if (Options.IsHeading(FirstParagraphsStylename))
                 if (p.Range.Start != list[1].Range.Start) // ha nem fogjuk mégegyszer fedolgozni
                     m_Books.Add(new Book(NormalizeTopicString(p.Range.Text), //c fejezetcím
                                          Options.Depth(FirstParagraphsStylename))); //c mélység
             for (int i = 1; i <= list.Count; ++i, pbar.Increment(1))
             {
-                string ParagraphsStylename = (list[i].get_Style() as Microsoft.Office.Interop.Word.Style).NameLocal;
+                string ParagraphsStylename = (list[i].get_Style() as MsWord.Style).NameLocal;
                 if (Options.IsHeading(ParagraphsStylename))
                     m_Books.Add(new Book(NormalizeTopicString(list[i].Range.Text),
                                          Options.Depth(ParagraphsStylename)));
@@ -87,7 +124,7 @@ namespace FlareOut
 
            // (Microsoft.Office.Interop.Word);
             {
-                (m_WordDoc as Microsoft.Office.Interop.Word._Document).Close(ref NO, ref na, ref na);
+                (m_WordDoc as MsWord._Document).Close(ref NO, ref na, ref na);
             }
             m_IsLoaded = true;
 
@@ -188,5 +225,6 @@ namespace FlareOut
                 writer.WriteLine("-- FlareOut Topic file log         --");
             }
         }
+
     }
 }

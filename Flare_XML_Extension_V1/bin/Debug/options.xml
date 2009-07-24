@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<AboveFlare_Options>
+  <TOC Mode="Colorize" BackColor="" />
+  <ALI Mode="Colorize" BackColor="ff0080ff" />
+  <ProjectSettings>
+    <ProjectFile Dir="D:\works\help - flare\uj olasz help\flare\ItaHelp09\ItaHelp09.flprj" />
+    <DefineFinder Dir="" />
+  </ProjectSettings>
+  <Images PathPrefix="../Resources/Images/ArchITA1XP2009(1-2-3-4)_modificato_correctura/" />
+  <MSWordProcessing Lang="HU">
+    <TopicStyles Lang="HU">
+      <Style Name="Focim" Depth="0" />
+      <Style Name="Címsor 1" Depth="0" />
+      <Style Name="Címsor 2" Depth="1" />
+      <Style Name="Címsor 3" Depth="2" />
+      <Style Name="Címsor 4" Depth="3" />
+    </TopicStyles>
+    <TopicStyles Lang="EN">
+      <Style Name="Focim" Depth="0" />
+      <Style Name="Heading 1" Depth="0" />
+      <Style Name="Heading 2" Depth="1" />
+      <Style Name="Heading 3" Depth="2" />
+      <Style Name="Heading 4" Depth="3" />
+    </TopicStyles>
+  </MSWordProcessing>
+</AboveFlare_Options>
