@@ -1,0 +1,1 @@
+Kiegészítés a MadCap Flare 3.1 szoftverhez
